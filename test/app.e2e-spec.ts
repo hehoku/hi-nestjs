@@ -115,13 +115,14 @@ describe('App e2e', () => {
       });
     });
     describe('Edit user', () => {
-      it('should edit user', () => {
+      it('should edit user', async () => {
         const dto: EditUserDto = {
           firstName: 'Test',
+          lastName: 'Hi',
           email: 'test@gmail.com',
         };
 
-        return pactum
+        const res = await pactum
           .spec()
           .patch('/users')
           .withHeaders({
@@ -129,7 +130,10 @@ describe('App e2e', () => {
           })
           .withBody(dto)
           .expectStatus(200)
-          .inspect();
+          .expectBodyContains(dto.firstName)
+          .expectBodyContains(dto.email);
+
+        return res;
       });
     });
   });
